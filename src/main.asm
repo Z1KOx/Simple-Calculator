@@ -1,8 +1,8 @@
 INCLUDE Irvine32.inc
 
 .data
-operand1 DWORD ?
-operand2 DWORD ?
+num1 DWORD ?
+num2 DWORD ?
 op BYTE ?
 
 prompt1  BYTE  "Enter first number: ", 0
@@ -20,12 +20,12 @@ main PROC
     mov edx, OFFSET prompt1   ; Prompt user for the first number
     call WriteString
     call ReadInt              ; Read integer from user input
-    mov operand1, eax         ; Store the first number
+    mov num1, eax             ; Store the first number
 
     mov edx, OFFSET prompt2   ; Prompt user for the second number
     call WriteString
     call ReadInt              ; Read integer from user input
-    mov operand2, eax         ; Store the second number
+    mov num2, eax             ; Store the second number
 
 operator_input:
     mov edx, OFFSET prompt3   ; Prompt user for the operator
@@ -54,30 +54,30 @@ compare_operators:
     jmp invalid_operator      ; Jump to invalid_operator if operator is invalid
 
 addition:
-    mov eax, operand1
-    add eax, operand2
+    mov eax, num1
+    add eax, num2
     mov result, eax
     
     jmp display_result
 
 subtraction:
-    mov eax, operand1
-    sub eax, operand2
+    mov eax, num1
+    sub eax, num2
     mov result, eax
 
     jmp display_result
 
 multiplication:
-    mov eax, operand1
-    imul eax, operand2
+    mov eax, num1
+    imul eax, num2
     mov result, eax
     
     jmp display_result
 
 division:
-    mov eax, operand1
+    mov eax, num1
     cdq                       ; Clear EDX to prepare for division
-    idiv operand2             ; Divide EAX by operand2, result in EAX, remainder in EDX
+    idiv num2                 ; Divide EAX by num2, result in EAX, remainder in EDX
     mov result, eax
     
     jmp display_result
@@ -98,7 +98,7 @@ display_result:
     mov edx, OFFSET newline  ; Print newline
     call WriteString
 
-    mov eax, operand1        ; Print num1
+    mov eax, num1            ; Print num1
     call WriteInt
 
     mov edx, OFFSET space    ; Print space
@@ -110,7 +110,7 @@ display_result:
     mov edx, OFFSET space    ; Print space
     call WriteString
 
-    mov eax, operand2        ; Print num2
+    mov eax, num2            ; Print num2
     call WriteInt
 
     mov edx, OFFSET space    ; Print space
