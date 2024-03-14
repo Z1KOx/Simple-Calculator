@@ -7,13 +7,13 @@ op BYTE ?
 
 prompt1  BYTE  "Enter first number: ", 0
 prompt2  BYTE  "Enter second number: ", 0
-prompt3  BYTE  "Enter operator (+, -, *, /): ", 0
+prompt3  BYTE  "Enter operator: ", 0
 result   DWORD ?
 
-invalid_input_msg BYTE "Invalid input!", 0
 invalid_operator_msg BYTE "Invalid operator!", 0
-result_msg BYTE "Result: ", 0
 newline db 10, 13, 0
+space BYTE ' ', 0 
+equals BYTE '=', 0
 
 .code
 main PROC
@@ -27,12 +27,15 @@ main PROC
     call ReadInt              ; Read integer from user input
     mov operand2, eax         ; Store the second number
 
+operator_input:
     mov edx, OFFSET prompt3   ; Prompt user for the operator
     call WriteString
     call ReadChar             ; Read a single character from user input
     mov op, al                ; Store the character as the operator
-
+    
+    call WriteChar            ; Print operator input
     call ReadChar             ; Wait for the user to press Enter
+    
     jmp compare_operators
     
 compare_operators:
@@ -61,7 +64,7 @@ subtraction:
     mov eax, operand1
     sub eax, operand2
     mov result, eax
-    
+
     jmp display_result
 
 multiplication:
@@ -80,15 +83,46 @@ division:
     jmp display_result
 
 invalid_operator:
+    mov edx, OFFSET newline
+    call WriteString
+    
     mov edx, OFFSET invalid_operator_msg
     call WriteString
     
-    jmp exit_program
-
-display_result:
-    mov eax, result
     mov edx, OFFSET newline
     call WriteString
+
+    jmp operator_input
+
+display_result:
+    mov edx, OFFSET newline  ; Print newline
+    call WriteString
+
+    mov eax, operand1        ; Print num1
+    call WriteInt
+
+    mov edx, OFFSET space    ; Print space
+    call WriteString
+
+    mov al, op               ; Print '+'
+    call WriteChar
+
+    mov edx, OFFSET space    ; Print space
+    call WriteString
+
+    mov eax, operand2        ; Print num2
+    call WriteInt
+
+    mov edx, OFFSET space    ; Print space
+    call WriteString
+
+    mov edx, OFFSET equals   ; Print '='
+    call WriteString
+
+    mov edx, OFFSET space    ; Print space
+    call WriteString
+
+    mov eax, result          ; Print result
     call WriteInt
 
     jmp exit_program
