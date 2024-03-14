@@ -1,35 +1,38 @@
-INCLUDE Irvine32.inc
+INCLUDE Irvine32.inc ; Include the Irvine32 library for input/output functions
 
 .data
 num1 DWORD ?
 num2 DWORD ?
 op BYTE ?
+result DWORD ? ; Variable to store the result of the operation
 
 prompt1  BYTE  "Enter first number: ", 0
 prompt2  BYTE  "Enter second number: ", 0
-prompt3  BYTE  "Enter operator: ", 0
-result   DWORD ?
+prompt3  BYTE  "Enter operator (+, -, *, /): ", 0
 
-invalid_operator_msg BYTE "Invalid operator!", 0
-newline db 10, 13, 0
-space BYTE ' ', 0 
+invalid_operator_msg BYTE "Invalid operator! Please enter +, -, *, or /.", 0
+newline db 10, 13, 0 ; Newline character sequence
+space BYTE ' ', 0
 equals BYTE '=', 0
 
 .code
 main PROC
     mov edx, OFFSET prompt1   ; Prompt user for the first number
     call WriteString
+    
     call ReadInt              ; Read integer from user input
     mov num1, eax             ; Store the first number
 
     mov edx, OFFSET prompt2   ; Prompt user for the second number
     call WriteString
+   
     call ReadInt              ; Read integer from user input
     mov num2, eax             ; Store the second number
 
 operator_input:
     mov edx, OFFSET prompt3   ; Prompt user for the operator
     call WriteString
+ 
     call ReadChar             ; Read a single character from user input
     mov op, al                ; Store the character as the operator
     
@@ -54,45 +57,45 @@ compare_operators:
     jmp invalid_operator      ; Jump to invalid_operator if operator is invalid
 
 addition:
-    mov eax, num1
-    add eax, num2
-    mov result, eax
+    mov eax, num1             ; Move num1 into eax register
+    add eax, num2             ; Add num1 (in eax) with num2 and load result into eax register
+    mov result, eax           ; Move result (in eax) into global variable result
     
     jmp display_result
 
 subtraction:
-    mov eax, num1
-    sub eax, num2
-    mov result, eax
+    mov eax, num1             ; Move num1 into eax register
+    sub eax, num2             ; Subtract num2 from num1 (in eax) and load result into eax register
+    mov result, eax           ; Move result (in eax) into global variable result
 
     jmp display_result
 
 multiplication:
-    mov eax, num1
-    imul eax, num2
-    mov result, eax
+    mov eax, num1             ; Move num1 into eax register
+    imul eax, num2            ; Multiply num1 (in eax) with num2 and load result into eax register
+    mov result, eax           ; Move result (in eax) into global variable result
     
     jmp display_result
 
 division:
-    mov eax, num1
-    cdq                       ; Clear EDX to prepare for division
-    idiv num2                 ; Divide EAX by num2, result in EAX, remainder in EDX
-    mov result, eax
+    mov eax, num1             ; Move num1 into eax register
+    cdq                       ; Clear edx to prepare for division
+    idiv num2                 ; Divide eax by num2, result in eax, remainder in edx
+    mov result, eax           ; Move result (in eax) into global variable result
     
     jmp display_result
 
 invalid_operator:
-    mov edx, OFFSET newline
+    mov edx, OFFSET newline                  ; Print newline
     call WriteString
     
-    mov edx, OFFSET invalid_operator_msg
+    mov edx, OFFSET invalid_operator_msg     ; Print invalid operator message
     call WriteString
     
-    mov edx, OFFSET newline
+    mov edx, OFFSET newline                  ; Print newline
     call WriteString
 
-    jmp operator_input
+    jmp operator_input                       ; Go back to operator_input
 
 display_result:
     mov edx, OFFSET newline  ; Print newline
@@ -104,7 +107,7 @@ display_result:
     mov edx, OFFSET space    ; Print space
     call WriteString
 
-    mov al, op               ; Print '+'
+    mov al, op               ; Print operator
     call WriteChar
 
     mov edx, OFFSET space    ; Print space
