@@ -13,6 +13,7 @@ result   DWORD ?
 invalid_input_msg BYTE "Invalid input!", 0
 invalid_operator_msg BYTE "Invalid operator!", 0
 result_msg BYTE "Result: ", 0
+newline db 10, 13, 0
 
 .code
 main PROC
@@ -86,6 +87,8 @@ invalid_operator:
 
 display_result:
     mov eax, result
+    mov edx, OFFSET newline
+    call WriteString
     call WriteInt
 
     jmp exit_program
