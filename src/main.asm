@@ -4,7 +4,7 @@ INCLUDE Irvine32.inc ; Include the Irvine32 library for input/output functions
 num1 DWORD ?
 num2 DWORD ?
 op BYTE ?
-selection DWORD ?
+selection DWORD ? ; User selection in the end
 result DWORD ? ; Variable to store the result of the operation
 
 prompt1  BYTE  "Enter first number: ", 0
