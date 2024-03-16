@@ -11,6 +11,7 @@ prompt1  BYTE  "Enter first number: ", 0
 prompt2  BYTE  "Enter second number: ", 0
 prompt3  BYTE  "Enter operator (+, -, *, /): ", 0
 prompt4  BYTE  "(1) to continue using this calculator (2) exit calculator: ", 0 ; End print
+goodbye_msg BYTE "Goodbye...", 0
 
 invalid_operator_msg BYTE "Invalid operator! Please enter +, -, *, or /.", 0
 newline db 10, 13, 0 ; Newline character sequence
@@ -154,7 +155,9 @@ display_result:
     je exit_program
 
 exit_program:
-    
+    mov edx, OFFSET goodbye_msg
+    call WriteString
+
     ret
 main ENDP
 
