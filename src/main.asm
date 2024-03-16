@@ -4,11 +4,13 @@ INCLUDE Irvine32.inc ; Include the Irvine32 library for input/output functions
 num1 DWORD ?
 num2 DWORD ?
 op BYTE ?
+selection DWORD ?
 result DWORD ? ; Variable to store the result of the operation
 
 prompt1  BYTE  "Enter first number: ", 0
 prompt2  BYTE  "Enter second number: ", 0
 prompt3  BYTE  "Enter operator (+, -, *, /): ", 0
+prompt4  BYTE  "(1) to continue using this calculator (2) exit calculator: ", 0 ; End print
 
 invalid_operator_msg BYTE "Invalid operator! Please enter +, -, *, or /.", 0
 newline db 10, 13, 0 ; Newline character sequence
@@ -17,6 +19,7 @@ equals BYTE '=', 0
 
 .code
 main PROC
+program_start:
     mov edx, OFFSET prompt1   ; Prompt user for the first number
     call WriteString
     
@@ -128,9 +131,30 @@ display_result:
     mov eax, result          ; Print result
     call WriteInt
 
-    jmp exit_program
+    mov edx, OFFSET newline  ; Print newline
+    call WriteString
+    mov edx, OFFSET newline  ; Print newline
+    call WriteString
+
+    mov edx, OFFSET prompt4  ; Prompt user exit or continue
+    call WriteString
+
+    mov eax, selection       ; Load selection into eax register
+    call ReadInt
+
+    mov edx, OFFSET newline  ; Print newline
+    call WriteString
+    mov edx, OFFSET newline  ; Print newline
+    call WriteString
+
+    cmp eax, 1               ; Compare eax(selection) register with 1
+    je program_start
+
+    cmp eax, 2               ; Compare eax(selection) register with 2
+    je exit_program
 
 exit_program:
+    
     ret
 main ENDP
 
