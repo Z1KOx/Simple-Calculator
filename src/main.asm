@@ -134,9 +134,8 @@ display_result:
 
     mov edx, OFFSET newline  ; Print newline
     call WriteString
-    mov edx, OFFSET newline  ; Print newline
-    call WriteString
 
+calculate_again:
     mov edx, OFFSET prompt4  ; Prompt user exit or continue
     call WriteString
 
@@ -148,17 +147,32 @@ display_result:
     mov edx, OFFSET newline  ; Print newline
     call WriteString
 
+    call clrscr 
+
     cmp eax, 1               ; Compare eax(selection) register with 1
     je program_start
 
     cmp eax, 2               ; Compare eax(selection) register with 2
     je exit_program
 
+    jmp calculate_again
+
 exit_program:
-    mov edx, OFFSET goodbye_msg
+    mov edx, OFFSET goodbye_msg  ; Print goodbye message
     call WriteString
 
     ret
 main ENDP
 
 END main
+
+clrscr PROC
+    mov ah, 06h     ; Function to scroll window up
+    mov al, 0       ; Clear entire window
+    mov bh, 08h     ; Attribute (color)
+    mov cx, 0       ; Upper left corner
+    mov dh, 24      ; Lower right corner
+    mov dl, 79      ; Lower right corner
+    int 10h         ; Call interrupt to clear screen
+    ret
+clrscr ENDP
