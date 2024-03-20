@@ -165,14 +165,3 @@ exit_program:
 main ENDP
 
 END main
-
-clrscr PROC
-    mov ah, 06h     ; Function to scroll window up
-    mov al, 0       ; Clear entire window
-    mov bh, 08h     ; Attribute (color)
-    mov cx, 0       ; Upper left corner
-    mov dh, 24      ; Lower right corner
-    mov dl, 79      ; Lower right corner
-    int 10h         ; Call interrupt to clear screen
-    ret
-clrscr ENDP
