@@ -4,7 +4,6 @@ INCLUDE Irvine32.inc ; Include the Irvine32 library for input/output functions
 num1 DWORD ?
 num2 DWORD ?
 op BYTE ?
-selection DWORD ?
 selection DWORD ? ; User selection in the end
 result DWORD ? ; Variable to store the result of the operation
 
@@ -165,4 +164,19 @@ exit_program:
     ret
 main ENDP
 
+<<<<<<< HEAD
 END main
+=======
+END main
+
+clrscr PROC
+    mov ah, 06h     ; Function to scroll window up
+    mov al, 0       ; Clear entire window
+    mov bh, 08h     ; Attribute (color)
+    mov cx, 0       ; Upper left corner
+    mov dh, 24      ; Lower right corner
+    mov dl, 79      ; Lower right corner
+    int 10h         ; Call interrupt to clear screen
+    ret
+clrscr ENDP
+>>>>>>> b6c4ad4d7a1a7b0e44ebe91ae19df5a9335add77
