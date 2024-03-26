@@ -147,7 +147,7 @@ calculate_again:
     mov edx, OFFSET newline  ; Print newline
     call WriteString
 
-    call clrscr 
+    call clrscr              ; Clear console
 
     cmp eax, 1               ; Compare eax(selection) register with 1
     je program_start
