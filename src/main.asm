@@ -160,6 +160,7 @@ calculate_again:
 exit_program:
     mov edx, OFFSET goodbye_msg  ; Print goodbye message
     call WriteString
+    call ReadChar                ; Wait for the user to press Enter
 
     ret
 main ENDP
