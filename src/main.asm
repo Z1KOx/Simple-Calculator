@@ -13,6 +13,7 @@ prompt3  BYTE  "Enter operator (+, -, *, /): ", 0
 prompt4  BYTE  "(1) to continue using this calculator (2) exit calculator: ", 0 ; End print
 goodbye_msg BYTE "Goodbye...", 0
 
+zero_divide_msg BYTE "You can't divide with 0", 0
 invalid_operator_msg BYTE "Invalid operator! Please enter +, -, *, or /.", 0
 newline db 10, 13, 0 ; Newline character sequence
 space BYTE ' ', 0
@@ -82,12 +83,31 @@ multiplication:
     jmp display_result
 
 division:
-    mov eax, num1             ; Move num1 into eax register
+    mov eax, num1             ; Check if num1 is 0
+    cmp eax, 0
+    je zero_divide
+
+    mov eax, num2             ; Check if num2 is 0
+    cmp eax, 0
+    je zero_divide
+
     cdq                       ; Clear edx to prepare for division
     idiv num2                 ; Divide eax by num2, result in eax, remainder in edx
     mov result, eax           ; Move result (in eax) into global variable result
-    
+
     jmp display_result
+
+zero_divide:
+    mov edx, OFFSET newline                  ; Print newline
+    call WriteString
+
+    mov edx, OFFSET zero_divide_msg          ; Print message
+    call WriteString
+
+    mov edx, OFFSET newline                  ; Print newline
+    call WriteString
+
+    jmp calculate_again
 
 invalid_operator:
     mov edx, OFFSET newline                  ; Print newline
